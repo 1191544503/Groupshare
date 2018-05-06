@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\Team;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Auth;
@@ -26,14 +27,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Team $team)
     {
         $teams=Auth::User()->team()->get();
         $messages=array();
-        Redis::set('ss','hello');
+     //   Redis::set('ss','hello');
         foreach($teams as $team){
             array_push($messages,$team->message()->orderBy('updated_at','desc')->first());
         }
-        return view('home',compact('data','messages','teams'));
+        $allteam=$team->all();
+        return view('home',compact('messages','teams','allteam'));
     }
 }

@@ -19,7 +19,7 @@
                      简介：{{$team->describe}}<br/>
                     </div>
                         <hr style="margin: 10px 0;">
-                        <div style="margin:0 -18px">
+                        <div style="margin:0 2px">
                         @can('isadmin',$team)
                         <a href="{{route('team.edit',$team->id)}}">
                             <button type="button" class="btn btn-default">修改信息</button></a>
@@ -27,9 +27,11 @@
                             <button type="button" class="btn btn-default">发布公告</button></a>
                         @endcan
                         @cannot('isexist',$team)
-                        <form action="#" method="post">
+                        <form action="{{route('team.add')}}" method="post">
                             {{csrf_field()}}
-                             <input type="submit" value="申请加入"/>
+                            <input name="user_id" value="{{Auth::user()->id}}" hidden>
+                            <input name="team_id" value="{{$team->id}}" hidden>
+                             <button type="submit" class="btn btn-default" value="申请加入">申请加入</button>
                         </form>
                         @endcannot
                     @can('isexist',$team)

@@ -11,6 +11,7 @@
             <div class="panel-body">
                 <form action="{{route('team.store')}}" method="POST" accept-charset="UTF-8"
                       enctype="multipart/form-data">
+                    @include('shared.error')
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                     <div class="form-group">

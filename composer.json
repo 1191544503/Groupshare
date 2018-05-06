@@ -10,7 +10,9 @@
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
         "mews/purifier": "~2.0",
+        "peinhu/aetherupload-laravel": "dev-master",
         "predis/predis": "1.0.*",
+        "summerblue/administrator": "~1.1",
         "sven/artisan-view": "^2.1"
     },
     "require-dev": {

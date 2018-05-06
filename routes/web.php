@@ -39,3 +39,11 @@ Route::get('/resources/{resource}/edit', 'ResourceController@edit')->name('resou
 Route::patch('/resources/{resource}', 'ResourceController@update')->name('resources.update');
 Route::delete('/resources/{resource}', 'ResourceController@destroy')->name('resources.destroy');
 Route::post('/upload_image', 'ResourceController@uploadImage')->name('resources.upload_image');
+Route::post('/team/add','Team_UserController@addteam')->name('team.add');
+Route::post('/team/auditteam','Team_UserController@auditteam')->name('team.auditteam');
+
+Route::get('/admins/login','AdminController@login')->name('admins.login');
+Route::post('/admins/check','AdminController@check')->name('admins.check');
+
+
+Route::resource('notifications', 'NotificationsController', ['only' => ['index']]);

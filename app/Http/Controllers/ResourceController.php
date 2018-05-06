@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Resource;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use App\Http\Requests\ResourceRequest;
 use App\Handlers\ImageUploadHandler;
 use App\Handlers\ResourceUploadHandler;
 use Auth;
@@ -19,10 +20,9 @@ class ResourceController extends Controller
         $this->authorize('edit',$resource);
         return view('resources.resource_form_edit',compact('resource'));
     }
-    public function store(Request $request,Resource $resource,ResourceUploadHandler $uploader){
+    public function store(ResourceRequest $request,Resource $resource,ResourceUploadHandler $uploader){
         $this->validate($request,[
-            'name'=>'required|min:3|string',
-            'introduce'=>'required|min:3|string'
+
         ]);
         $resource->name=$request->name;
         $resource->team_id=$request->team_id;
@@ -64,12 +64,9 @@ class ResourceController extends Controller
     public function show(Resource $resource){
         return view('resources.resource_show',compact('resource'));
     }
-    public function update(Request $request,Resource $resource,ResourceUploadHandler $uploader){
+    public function update(ResourceRequest $request,Resource $resource,ResourceUploadHandler $uploader){
         $this->authorize('edit',$resource);
-        $this->validate($request,[
-            'name'=>'required|min:3|string',
-            'introduce'=>'required|min:3|string'
-        ]);
+
         $resource->name=$request->name;
         $resource->team_id=$request->team_id;
         $resource->user_id=Auth::User()->id;
@@ -83,8 +80,22 @@ class ResourceController extends Controller
         $resource->save();
         return redirect()->route('team.show',$request->team_id)->with('success','文件更新成功');;
     }
+
+    /**
+     * @param Resource $resource
+     * @return \Illuminate\Http\RedirectResponse
+     * 资源删除，对于有附件的资源，将附件转移到待删除文件夹内，然后将真实文件删除
+     */
     public function destroy(Resource $resource){
         $this->authorize('destroy',$resource);
+        if(!empty($resource->url)) {
+
+            $really_path = public_path() . substr($resource->url, strpos($resource->url, '/upload'));//获取绝对地址
+            $tran_path = public_path() . '/delete/resource/' . date("Y-m-d-H-i-s").'-'.rand(1,1000). '.' .
+                pathinfo($resource->url)['extension'];//获取要转移到的地址
+            copy($really_path, $tran_path);
+            unlink($really_path);
+        }
         $resource->delete();
         return redirect()->back()->with('success','文章成功删除');
     }

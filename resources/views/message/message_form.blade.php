@@ -14,7 +14,7 @@
                 <form action="{{route('message.update',$team->id)}}" method="POST" accept-charset="UTF-8">
                     {{method_field('patch')}}
                     {{csrf_field()}}
-
+                    @include('shared.error')
                     <div class="form-group">
                         <label for="introduction-field">公告</label>
                         <textarea name="text" id="introduction-field" class="form-control" rows="3"></textarea>

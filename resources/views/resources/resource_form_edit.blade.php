@@ -17,6 +17,7 @@
                     <hr>
                     <form action="{{ route('resources.update',$resource->id) }}" method="POST" accept-charset="UTF-8"
                           enctype="multipart/form-data">
+                        @include('shared.error')
                         {{csrf_field()}}
                         {{method_field('PATCH')}}
                         <input type="text" name="team_id" value="{{$resource->team_id}}" hidden>

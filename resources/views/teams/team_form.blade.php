@@ -9,11 +9,12 @@
                 </h4>
             </div>
             <div class="panel-body">
+                @include('shared.error')
                 <form action="{{route('team.update',$team->id)}}" method="POST" accept-charset="UTF-8"
                       enctype="multipart/form-data">
                     <input type="hidden" name="_method" value="PATCH">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
+                    <input type="text" value="{{Auth::user()->id}}" name="admin_id" hidden>
                     <div class="form-group">
                         <label for="name-field">小组名称</label>
                         <input class="form-control" type="text" name="name" id="name-field" value="{{$team->name}}" />

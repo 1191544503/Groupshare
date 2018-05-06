@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Models\Team_User;
-use App\Models\Team;
+use Auth;
 
 class User extends Authenticatable
 {
@@ -28,18 +27,28 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    use Notifiable {
+        notify as protected laravelNotify;
+    }
+
     public function team(){
         return $this->belongsToMany(Team::class,'team_users','user_id','team_id');
     }
     public function resource(){
         return $this->hasMany(Resource::class);
     }
-    public function addtoteam($team_id)//加入小组
+
+    public function notify($instance)
     {
-        if (!is_array($team_id)) {
-            $team_id = compact('team_id');
+        if ($this->id == Auth::id()) {
+            return;
         }
-        $this->team()->sync($team_id, false);
+        $this->increment('notification_count');
+        $this->laravelNotify($instance);
+    }
+    public function marskread(){
+        $this->notification_count=$this->notification_count-1;
+        $this->save();
     }
 
 }

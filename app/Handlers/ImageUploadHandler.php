@@ -33,7 +33,7 @@ class ImageUploadHandler
         $file->move($upload_path, $filename);
 
         return [
-            'path' => config('app.url') . "/Boss/public/$folder_name/$filename"
+            'path' => config('app.url') . "/$folder_name/$filename"
         ];
     }
 }

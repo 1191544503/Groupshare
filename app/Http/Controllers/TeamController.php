@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Team_User;
 use Illuminate\Http\Request;
 use App\Models\Team;
 use Auth;
 use App\Handlers\ImageUploadHandler;
+use App\Http\Requests\TeamRequest;
 
 class TeamController extends Controller
 {
@@ -28,12 +30,8 @@ class TeamController extends Controller
         $this->authorize('isadmin',$team);
         return view('teams.team_form',compact('team'));
     }
-    public function update(Request $request,ImageUploadHandler $uploader,Team $team){
+    public function update(TeamRequest $request,ImageUploadHandler $uploader,Team $team){
         $this->authorize('isadmin',$team);
-        $this->validate($request,[
-            'name'=>'max:20',
-            'describe'=>'max:100'
-        ]);
         $team->name=$request->name;
         $team->describe=$request->describe;
         if ($request->photo) {
@@ -49,7 +47,7 @@ class TeamController extends Controller
     public function create(){
         return view('teams.create');
     }
-    public function store(Request $request,Team $team,ImageUploadHandler $uploader){
+    public function store(TeamRequest $request,Team $team,ImageUploadHandler $uploader){
         $this->validate($request,[
             'name'=>'required|min:1',
         ]);
@@ -64,7 +62,7 @@ class TeamController extends Controller
                 $team->photo = $result['path'];
             }
         }
-        $team->admin_id=Auth::user()->id;
+        $team->admin_id=$request->admin_id;
         $team->save();
         return redirect()->route('home')->with('success','小组创建成功');
     }

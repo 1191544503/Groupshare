@@ -6,7 +6,13 @@
         @include('shared._message')
         <div class="col-md-3">
             <div class="panel panel-default">
-            全部小组+ 搜索框
+                <div class="panel-heading">全部小组</div>
+                @foreach($allteam as $oneteam)
+                    <a href="{{route('team.show',$oneteam->id)}}" class="list-group-item">
+                        <img src="{{$oneteam->photo}}" width="30px">
+                        {{$oneteam->name}}
+                    </a>
+                @endforeach
             </div>
         </div>
         <div class="col-md-6 ">

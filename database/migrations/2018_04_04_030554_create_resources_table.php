@@ -19,8 +19,7 @@ class CreateResourcesTable extends Migration
             $table->text('introduce');
             $table->integer('user_id')->index();
             $table->integer('team_id')->index();
-            $table->string('url')->default(null);
-            $table->integer('docount')->default(0);
+            $table->string('url')->nullable();
             $table->timestamps();
         });
     }
